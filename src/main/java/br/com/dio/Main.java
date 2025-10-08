@@ -7,10 +7,8 @@ import br.com.dio.repository.AccountRepository;
 import br.com.dio.repository.InvestmentRepository;
 
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -44,10 +42,10 @@ public class Main {
             switch (option) {
                 case 1: createAccount();
                 case 2: createInvestment();
-                case 3: createWalletInvestment()
+                case 3: createWalletInvestment();
                 case 4: deposit();
                 case 5: withdraw();
-                case 6: transferToAccount()
+                case 6: transferToAccount();
                 case 7: incInvestment();
                 case 8: rescueInvestment();
                 //case 9: accountRepository.list().forEach(a -> System.out.println(a));
@@ -161,14 +159,13 @@ public class Main {
     private static void checkHistory() {
         System.out.println("Informe a chave pix da conta para verificar extrato: ");
         var pix = scanner.next();
-        AccountWallet wallet;
         try {
             var sortedHistory = accountRepository.getHistory(pix);
             sortedHistory.forEach((k, v) -> {
                 System.out.println(k.format(DateTimeFormatter.ISO_DATE_TIME));
                 System.out.println(v.getFirst().transactionId());
                 System.out.println(v.getFirst().description());
-                System.out.println(v.size().);
+                System.out.println(v.size());
             });
         } catch (AccountNotFoundException e) {
             System.out.println(e.getMessage());
