@@ -7,6 +7,7 @@ import br.com.dio.model.MoneyAudit;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,16 +16,18 @@ import static br.com.dio.repository.CommonsRepository.checkFundsForTransaction;
 
 public class AccountRepository {
 
-    private List<AccountWallet> accounts;
+    private final List<AccountWallet> accounts = new ArrayList<>();
 
     public AccountWallet create(final List<String> pix, final long initialFunds) {
-        var pixInUse = accounts.stream().flatMap(accountWallet -> accountWallet.getPix().stream()).toList();
-        for (var p : pix) {
-            if (pixInUse.contains(p)) {
-                throw new PixInUseException("O pix '" + p + "' já esta em uso");
+        if (!accounts.isEmpty()) {
+            var pixInUse = accounts.stream().flatMap(accountWallet -> accountWallet.getPix().stream()).toList();
+            for (var p : pix) {
+                if (pixInUse.contains(p)) {
+                    throw new PixInUseException("O pix '" + p + "' já esta em uso");
+
+                }
 
             }
-
         }
         var newAccount = new AccountWallet(initialFunds, pix);
         accounts.add(newAccount);
