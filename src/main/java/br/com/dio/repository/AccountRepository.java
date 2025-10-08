@@ -3,8 +3,13 @@ package br.com.dio.repository;
 import br.com.dio.exception.AccountNotFoundException;
 import br.com.dio.exception.PixInUseException;
 import br.com.dio.model.AccountWallet;
+import br.com.dio.model.MoneyAudit;
 
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static br.com.dio.repository.CommonsRepository.checkFundsForTransaction;
 
@@ -56,5 +61,14 @@ public class AccountRepository {
     public List<AccountWallet> list() {
         return this.accounts;
     }
+
+    public Map<OffsetDateTime, List<MoneyAudit>> getHistory(final String pix) {
+        var wallet = findByPix(pix);
+        var audit = wallet.getFinancialTransactions();
+        return audit.stream()
+                .collect(Collectors.groupingBy(t -> t.creactedAt().truncatedTo(ChronoUnit.SECONDS)));
+    }
+
+
 
 }
